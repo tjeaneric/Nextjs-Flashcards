@@ -1,7 +1,26 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import { request, gql } from "graphql-request";
 
-const Home: NextPage = () => {
+export async function getServerSideProps() {
+  const query = gql`
+    {
+      frameworks {
+        id
+        name
+      }
+    }
+  `;
+  const data: any = await request("http://localhost:3000/api/graphql", query);
+  const { frameworks } = data;
+  return {
+    props: {
+      frameworks,
+    },
+  };
+}
+
+const Home: NextPage = ({ frameworks }: any) => {
   return (
     <>
       <Head>
@@ -11,7 +30,13 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="text-center">
-        <div className="text-3xl text-green-600 ">Hello Flashcards</div>
+        <ul>
+          {frameworks.map((f: any) => (
+            <li key={f.id} className="text-3xl text-green-600 ">
+              {f.name}
+            </li>
+          ))}
+        </ul>
       </main>
     </>
   );
