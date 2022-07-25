@@ -1,19 +1,9 @@
-import { makeSchema, queryType } from "nexus";
 import { ApolloServer } from "apollo-server-micro";
 import { PageConfig } from "next";
 import Cors from "micro-cors";
+import schema from "../../schema";
 
 const cors = Cors();
-
-const Query = queryType({
-  definition(t) {
-    t.string("hello", { resolve: () => "hello Flashcards!" });
-  },
-});
-
-const schema = makeSchema({
-  types: [Query],
-});
 
 const server = new ApolloServer({
   schema,
